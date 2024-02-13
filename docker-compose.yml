@@ -1,17 +1,18 @@
 version: "3.7"
 
 services:
-  web:
-    image: linuxserver/nginx
+  nginx:
+    image: lscr.io/linuxserver/nginx:latest
     container_name: web-container
-    ports:
-      - "8080:80"
     environment:
-      - PHP_FPM_ENABLE=true
-      - PHP_FPM_HOST=127.0.0.1
-      - PHP_FPM_PORT=9000
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
     volumes:
       - ./index.php:/config/www/index.php
+    ports:
+      - 80:80
+      - 443:443
     networks:
       - web-network
 
