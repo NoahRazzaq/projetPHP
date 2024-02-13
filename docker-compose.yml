@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  web:
+    image: nginx:latest
+    container_name: web-php-container
+    ports:
+      - "8080:80"
+    volumes:
+      - ./index.php:/usr/share/nginx/html/index.php
+    networks:
+      - web-php-network
+
+  php:
+    image: php:latest
+    container_name: php-container
+    volumes:
+      - ./index.php:/var/www/html/index.php
+    networks:
+      - web-php-network
+
+  db:
+    image: mariadb:latest
+    container_name: db-container
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: your_database_name
+      MYSQL_USER: your_username
+      MYSQL_PASSWORD: your_password
+    volumes:
+      - ./InitDB.sql:/docker-entrypoint-initdb.d/InitDB.sql
+    networks:
+      - web-php-network
+
+networks:
+  web-php-network:
+    driver: bridge
